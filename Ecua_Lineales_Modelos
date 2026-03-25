@@ -4,7 +4,7 @@
 # 1) Sustitución
 # 2) Reducción
 # 3) Igualación
-# 4) Regla de Cramer
+# 4) Determinantes
 # ============================================
 
 def sustitucion(a1, b1, c1, a2, b2, c2):
@@ -40,9 +40,9 @@ def cramer(a1, b1, c1, a2, b2, c2):
     y = Dy / D
     return x, y
 
-# ==============================
+# <><><><><><><><><><><><><><><>
 # INGRESO DE DATOS
-# ==============================
+# <><><><><><><><><><><><><><><>
 
 print("Sistema:")
 print("a1*x + b1*y = c1")
@@ -56,17 +56,17 @@ a2 = float(input("\na2: "))
 b2 = float(input("b2: "))
 c2 = float(input("c2: "))
 
-print("\nMétodos:")
-print("1) Sustitución")
-print("2) Reducción")
+print("\nMetodos:")
+print("1) Sustitucion")
+print("2) Reduccion")
 print("3) Igualación")
 print("4) Cramer")
 
 opcion = int(input("\nElige método: "))
 
-# ==============================
+# ----------------------------->
 # EJECUCIÓN
-# ==============================
+# ----------------------------->
 
 if opcion == 1:
     x, y = sustitucion(a1, b1, c1, a2, b2, c2)
@@ -80,12 +80,12 @@ else:
     print("Opción inválida")
     exit()
 
-# ==============================
-# RESULTADO
-# ==============================
+# <----------------------------->
+# RESULTADOS
+# <----------------------------->
 
 if x is None:
-    print("\nEl sistema no tiene solución única.")
+    print("\nEl sistema no tiene solución unica.")
 else:
     print(f"\nResultado:")
     print(f"x = {x}")
