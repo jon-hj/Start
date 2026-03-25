@@ -18,7 +18,7 @@ NUMBERS = ["LISTA", "DE","CONTACTOS"]
 MESSAGE = ("El mensaje que quieres colocar")
 VIDEO_PATH = r"La ruta del video"
 
-# Verificar video
+# Verifica el video
 if not os.path.exists(VIDEO_PATH):
     print(f"ERROR: Video no encontrado: {VIDEO_PATH}")
     exit(1)
@@ -445,7 +445,7 @@ class WhatsAppBot:
             except:
                 continue
 
-        print("Intentando método de coordenadas para botón enviar...")
+        print("Intentando encontrar el boton de enviar...")
         return self.click_send_by_coordinates()
 
     def click_send_by_coordinates(self):
