@@ -1,0 +1,95 @@
+# ============================================
+# SOLUCIONADOR DE SISTEMAS 2x2
+# Métodos:
+# 1) Sustitución
+# 2) Reducción
+# 3) Igualación
+# 4) Regla de Cramer
+# ============================================
+
+def sustitucion(a1, b1, c1, a2, b2, c2):
+    # Despejar x de la primera: x = (c1 - b1*y)/a1
+    # Sustituir en la segunda
+    y = (c2 - a2*(c1/a1)) / (b2 - a2*(b1/a1))
+    x = (c1 - b1*y) / a1
+    return x, y
+
+def reduccion(a1, b1, c1, a2, b2, c2):
+    # Eliminamos x
+    factor = a1 / a2
+    b = b1 - factor * b2
+    c = c1 - factor * c2
+    y = c / b
+    x = (c1 - b1*y) / a1
+    return x, y
+
+def igualacion(a1, b1, c1, a2, b2, c2):
+    # x = (c1 - b1*y)/a1
+    # x = (c2 - b2*y)/a2
+    # Igualamos
+    y = (c1/a1 - c2/a2) / (b1/a1 - b2/a2)
+    x = (c1 - b1*y) / a1
+    return x, y
+
+def cramer(a1, b1, c1, a2, b2, c2):
+    D = a1*b2 - a2*b1
+    Dx = c1*b2 - c2*b1
+    Dy = a1*c2 - a2*c1
+    
+    if D == 0:
+        return None, None
+    
+    x = Dx / D
+    y = Dy / D
+    return x, y
+
+# ==============================
+# INGRESO DE DATOS
+# ==============================
+
+print("Sistema:")
+print("a1*x + b1*y = c1")
+print("a2*x + b2*y = c2\n")
+
+a1 = float(input("a1: "))
+b1 = float(input("b1: "))
+c1 = float(input("c1: "))
+
+a2 = float(input("\na2: "))
+b2 = float(input("b2: "))
+c2 = float(input("c2: "))
+
+print("\nMétodos:")
+print("1) Sustitución")
+print("2) Reducción")
+print("3) Igualación")
+print("4) Cramer")
+
+opcion = int(input("\nElige método: "))
+
+# ==============================
+# EJECUCIÓN
+# ==============================
+
+if opcion == 1:
+    x, y = sustitucion(a1, b1, c1, a2, b2, c2)
+elif opcion == 2:
+    x, y = reduccion(a1, b1, c1, a2, b2, c2)
+elif opcion == 3:
+    x, y = igualacion(a1, b1, c1, a2, b2, c2)
+elif opcion == 4:
+    x, y = cramer(a1, b1, c1, a2, b2, c2)
+else:
+    print("Opción inválida")
+    exit()
+
+# ==============================
+# RESULTADO
+# ==============================
+
+if x is None:
+    print("\nEl sistema no tiene solución única.")
+else:
+    print(f"\nResultado:")
+    print(f"x = {x}")
+    print(f"y = {y}")
