@@ -1,5 +1,4 @@
-que en de mandar un video se mande una imagen de la ruta que yo coloque en este codigo y dame el codigo completo correguido :
- import time
+import time
 import random
 import os
 import traceback
@@ -15,14 +14,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 # ================= CONFIGURACION =================
-NUMBERS = ["+573226760638", "+573213468086"]
-MESSAGE = (
-    "Hola, soy La Profe Luisa. Te escribo con el corazon, "
-    "porque si eres de Charala y estas recibiendo este mensaje, "
-    "es porque compartimos raiz, historia y orgullo por nuestra tierra. "
-    "Puedo contar con tu voto este 8 de marzo?"
-)
-VIDEO_PATH = r"C:\Program Files\videos\Luisa.mp4"
+NUMBERS = ["LISTA", "DE","CONTACTOS"]
+MESSAGE = ("El mensaje que quieres colocar")
+VIDEO_PATH = r"La ruta del video"
 
 # Verificar video
 if not os.path.exists(VIDEO_PATH):
@@ -123,14 +117,13 @@ class WhatsAppBot:
 
     def wait_for_chat_ready(self):
         try:
-            # Esperar a que se cargue el panel lateral (lista de chats)
             self.wait.until(
                 EC.presence_of_element_located((By.XPATH, "//div[@id='pane-side']"))
             )
             print("Panel lateral cargado")
             time.sleep(2)
             
-            # Esperar a que el campo de texto del chat esté disponible
+
             self.wait.until(
                 EC.presence_of_element_located((By.XPATH, "//footer//div[@contenteditable='true']"))
             )
@@ -143,8 +136,6 @@ class WhatsAppBot:
             if self.check_invalid_number():
                 print("WhatsApp indica que el número es inválido (URL phone inválido).")
                 return False
-            
-            # Intentar verificar si hay algún error visible
             try:
                 error_elements = self.driver.find_elements(By.XPATH, "//div[contains(text(),'error') or contains(text(),'Error')]")
                 if error_elements:
@@ -159,7 +150,6 @@ class WhatsAppBot:
         print("Adjuntando video...")
 
         try:
-            # Asegurarse de que el campo de texto esté enfocado
             try:
                 text_field = self.driver.find_element(By.XPATH, "//footer//div[@contenteditable='true']")
                 text_field.click()
@@ -167,10 +157,7 @@ class WhatsAppBot:
                 time.sleep(2)
             except:
                 print("No se pudo hacer clic en campo de texto, continuando...")
-
-            # Método 1: Buscar input file directamente
             try:
-                # Hacer visible el input file
                 js_script = """
                     var inputs = document.querySelectorAll('input[type="file"]');
                     for (var i = 0; i < inputs.length; i++) {
@@ -192,8 +179,6 @@ class WhatsAppBot:
                 num_inputs = self.driver.execute_script(js_script)
                 print(f"Inputs file encontrados: {num_inputs}")
                 time.sleep(2)
-
-                # Encontrar y enviar video
                 file_input = self.driver.find_element(By.XPATH, "//input[@type='file']")
                 file_input.send_keys(video_path)
                 print("Video enviado al input file")
@@ -225,7 +210,7 @@ class WhatsAppBot:
                         except:
                             continue
 
-                    # Enviar video al input
+
                     time.sleep(2)
                     file_input = self.wait.until(
                         EC.presence_of_element_located((By.XPATH, "//input[@type='file']"))
@@ -318,27 +303,22 @@ class WhatsAppBot:
                 return False
 
             try:
-                # Método seguro para enviar texto sin problemas de Unicode
+
                 self.driver.execute_script("arguments[0].click();", caption_field)
                 time.sleep(1)
 
-                # Limpiar campo primero
+
                 self.driver.execute_script("arguments[0].innerHTML = '';", caption_field)
                 time.sleep(0.5)
 
-                # Usar JavaScript para establecer el texto (evita problemas con ChromeDriver)
-                # Dividir el mensaje en partes más pequeñas para evitar problemas
                 safe_message = message.replace("'", "\\'").replace('"', '\\"')
                 
-                # Enviar el texto usando JavaScript en fragmentos
                 js_script = f"""
                     var element = arguments[0];
                     var text = '{safe_message}';
                     
-                    // Establecer el texto directamente
                     element.textContent = text;
                     
-                    // Disparar eventos para que WhatsApp lo detecte
                     var inputEvent = new Event('input', {{ bubbles: true }});
                     var changeEvent = new Event('change', {{ bubbles: true }});
                     element.dispatchEvent(inputEvent);
@@ -351,7 +331,6 @@ class WhatsAppBot:
                 print(f"Mensaje escrito usando JavaScript: {text_length} caracteres")
                 time.sleep(2)
 
-                # Verificar que el texto se haya establecido
                 try:
                     text_content = self.driver.execute_script("return arguments[0].textContent || arguments[0].innerText;", caption_field)
                     if text_content and len(text_content.strip()) > 0:
@@ -369,27 +348,23 @@ class WhatsAppBot:
             except Exception as e:
                 print(f"Error escribiendo mensaje con JavaScript: {e}")
                 
-                # Método alternativo: enviar teclas ASCII seguras
+
                 try:
                     print("Intentando método alternativo (ASCII seguro)...")
                     
-                    # Hacer clic en el campo
                     caption_field.click()
                     time.sleep(0.5)
                     
-                    # Enviar texto sin caracteres problemáticos
                     safe_message = message
                     # Remover caracteres problemáticos si existen
                     if "👉" in safe_message:
                         safe_message = safe_message.replace("👉", "->")
                     
-                    # Enviar carácter por carácter más lentamente
                     for char in safe_message:
                         try:
                             caption_field.send_keys(char)
                             time.sleep(0.05)
                         except:
-                            # Si falla un carácter, saltarlo
                             continue
                     
                     print(f"Mensaje escrito (método alternativo): {len(safe_message)} caracteres")
